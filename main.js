@@ -8,8 +8,8 @@ renderer.backgroundColor = 0x000000;
 document.body.appendChild(renderer.view);
 
 let stage = new PIXI.Container();
-
-let y = 10
+let tweetBoxes = new PIXI.Container();
+stage.addChild(tweetBoxes);
 
 function addTweet(userName, content)
 {
@@ -58,14 +58,27 @@ function addTweet(userName, content)
     tweetBox.box.addChild(contentSprite);
 
     tweetBox.box.x = 10;
-    tweetBox.box.y = y;
-    y += boxHeight + 10;
-    stage.addChild(tweetBox.box);
+    tweetBox.box.y = 0;
+    tweetBoxes.addChild(tweetBox.box);
+    updateBoxesHeights();
+    return tweetBox;
+}
+
+function updateBoxesHeights()
+{
+    let y = 10;
+
+    for (tweetBox of tweetBoxes.children)
+    {
+        tweetBox.y = y;
+        y += tweetBox.height + 15;
+    }
 }
 
 addTweet("Olivier", "Busy coding an awesome node.js utility!");
 addTweet("Olivier", "Still coding an awesome node.js utility! Look, this "
     + "message fits on multiple lines!");
+addTweet("NewUSer", "Du texte");
 addTweet("Coder", "Node.js ftw");
 
 renderer.render(stage);
