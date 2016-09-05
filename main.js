@@ -2,14 +2,14 @@
 
 let renderer = PIXI.autoDetectRenderer(512, 512);
 let resources = PIXI.loader.resources;
+let interactionManager = new PIXI.interaction.InteractionManager(renderer);
 renderer.backgroundColor = 0x000000;
 
 //Add the canvas to the HTML document
 document.body.appendChild(renderer.view);
 
 let stage = new PIXI.Container();
-let tweetBoxes = new PIXI.Container();
-stage.addChild(tweetBoxes);
+let tweetBoxArray = [];
 
 function addTweet(userName, content)
 {
@@ -59,7 +59,9 @@ function addTweet(userName, content)
 
     tweetBox.box.x = 10;
     tweetBox.box.y = 0;
-    tweetBoxes.addChild(tweetBox.box);
+
+    stage.addChild(tweetBox.box);
+    tweetBoxArray.push(tweetBox)
     updateBoxesHeights();
     return tweetBox;
 }
@@ -68,10 +70,30 @@ function updateBoxesHeights()
 {
     let y = 10;
 
-    for (tweetBox of tweetBoxes.children)
+    for (tweetBox of tweetBoxArray)
     {
-        tweetBox.y = y;
-        y += tweetBox.height + 15;
+        tweetBox.box.y = y;
+        y += tweetBox.box.height + 15;
+    }
+}
+
+function mouseDownCallback(event)
+{
+    removeBoxAtPos(event.data.global.x, event.data.global.y);
+    updateBoxesHeights();
+    renderer.render(stage);
+}
+
+function removeBoxAtPos(x, y)
+{
+    for (let i = 0; i < tweetBoxArray.length; i++)
+    {
+        if (tweetBoxArray[i].box.getBounds().contains(x, y))
+        {
+            tweetBoxArray[i].box.destroy(true);
+            tweetBoxArray.splice(i, 1);
+            return;
+        }
     }
 }
 
@@ -80,5 +102,7 @@ addTweet("Olivier", "Still coding an awesome node.js utility! Look, this "
     + "message fits on multiple lines!");
 addTweet("NewUSer", "Du texte");
 addTweet("Coder", "Node.js ftw");
+
+interactionManager.on("mousedown", mouseDownCallback);
 
 renderer.render(stage);
