@@ -1,8 +1,11 @@
 // main code of the application
 
+let PIXI = require('./pixi.min');
+
 let renderer = PIXI.autoDetectRenderer(512, 512);
 let resources = PIXI.loader.resources;
 let interactionManager = new PIXI.interaction.InteractionManager(renderer);
+
 renderer.backgroundColor = 0x000000;
 
 //Add the canvas to the HTML document
