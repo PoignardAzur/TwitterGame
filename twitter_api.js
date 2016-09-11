@@ -42,7 +42,7 @@ function connectToTwitter(socket)
     {
         console.log("Error trying to read search/tweets:")
         console.log(err);
-        socket.emit("error", "Failed to connect to twitter");
+        socket.emit("server_error", "Failed to connect to twitter");
     }
 
     // If the client is disconnect, the stream is no longer necessary

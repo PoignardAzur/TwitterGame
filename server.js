@@ -4,14 +4,8 @@
 ** script to get the application
 */
 
-let http = require("http");
 let twitterApi = require('./twitter_api');
-
-// This function is called for every new client that tries to load a page
-let on_request = require("./server_response").on_request;
-let server = http.createServer(on_request);
-
-var io = require('socket.io').listen(server);
+let io = require('socket.io').listen(8042);;
 
 io.sockets.on('connection', on_connection);
 function on_connection (socket)
@@ -44,5 +38,3 @@ function on_connection (socket)
         }
     }
 }
-
-server.listen(8042);

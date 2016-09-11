@@ -17,4 +17,7 @@ let socket = io.connect('http://localhost:8042')
     .on('new_tweet', function(userName, content) {
         canvas.addTweet(userName, content);
         canvas.render();
+    })
+    .on("server_error", function(err) {
+        alert(err);
     });
