@@ -8,8 +8,6 @@ let Twit = require('twit')
 module.exports.connectToTwitter = connectToTwitter;
 function connectToTwitter(socket)
 {
-    socket.hashtags_str = '#KohLanta';
-
     let twitSocket = new Twit(require("./twitter_keys").keys);
 
     twitSocket.get('search/tweets', { q: socket.hashtags_str }, get_callback);

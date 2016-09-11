@@ -20,12 +20,29 @@ function on_connection (socket)
 
     socket.hashtags_str = "";
     socket.on("hashtags", on_hashtags);
-    function on_hashtags(socket)
+    function on_hashtags(hashtag_list)
     {
-        // TODO - Add hashtag handling
-    }
+        if (!socket.hashtags_str)
+        {
+            for (line of hashtag_list.split('\n'))
+            {
+                for (word of line.split(' '))
+                {
+                    // Should prevent code injections (?)
+                    if (word.match(/^#\w+$/))
+                    {
+                        socket.hashtags_str += word + " ";
+                    }
 
-    twitterApi.connectToTwitter(socket);
+                }
+            }
+
+            if (socket.hashtags_str)
+            {
+                twitterApi.connectToTwitter(socket);
+            }
+        }
+    }
 }
 
 server.listen(8042);
