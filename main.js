@@ -1,6 +1,9 @@
 // main code of the application
 
 let PIXI = require('./pixi.min');
+//let twitterApi = require('./twitter_test').twitterApi;
+let io = require('socket.io-client');
+
 
 let renderer = PIXI.autoDetectRenderer(512, 512);
 let resources = PIXI.loader.resources;
@@ -13,6 +16,8 @@ document.body.appendChild(renderer.view);
 
 let stage = new PIXI.Container();
 let tweetBoxArray = [];
+
+//twitterApi(addTweet);
 
 function addTweet(userName, content)
 {
@@ -80,7 +85,8 @@ function updateBoxesHeights()
     }
 }
 
-function mouseDownCallback(event)
+interactionManager.on("mousedown", on_mouseDown);
+function on_mouseDown(event)
 {
     removeBoxAtPos(event.data.global.x, event.data.global.y);
     updateBoxesHeights();
@@ -100,12 +106,15 @@ function removeBoxAtPos(x, y)
     }
 }
 
-addTweet("Olivier", "Busy coding an awesome node.js utility!");
-addTweet("Olivier", "Still coding an awesome node.js utility! Look, this "
-    + "message fits on multiple lines!");
-addTweet("NewUSer", "Du texte");
-addTweet("Coder", "Node.js ftw");
-
-interactionManager.on("mousedown", mouseDownCallback);
-
 renderer.render(stage);
+
+let socket = io.connect('http://localhost:8042')
+    .on("connect", function () {
+        let hashtags = "nothing yet";
+        socket.emit("hashtags", hashtags);
+    })
+    .on('new_tweet', function(userName, content) {
+        alert("got it : " + userName + " -  "+ content);
+        addTweet(userName, content);
+        renderer.render(stage);
+    });
