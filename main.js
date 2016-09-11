@@ -1,9 +1,7 @@
 // main code of the application
 
 let PIXI = require('./pixi.min');
-//let twitterApi = require('./twitter_test').twitterApi;
 let io = require('socket.io-client');
-
 
 let renderer = PIXI.autoDetectRenderer(512, 512);
 let resources = PIXI.loader.resources;
@@ -16,8 +14,6 @@ document.body.appendChild(renderer.view);
 
 let stage = new PIXI.Container();
 let tweetBoxArray = [];
-
-//twitterApi(addTweet);
 
 function addTweet(userName, content)
 {
@@ -110,11 +106,10 @@ renderer.render(stage);
 
 let socket = io.connect('http://localhost:8042')
     .on("connect", function () {
-        let hashtags = "nothing yet";
+        let hashtags = "#nothing #yet";
         socket.emit("hashtags", hashtags);
     })
     .on('new_tweet', function(userName, content) {
-        alert("got it : " + userName + " -  "+ content);
         addTweet(userName, content);
         renderer.render(stage);
     });

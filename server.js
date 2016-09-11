@@ -1,7 +1,9 @@
 let http = require('http');
 let url = require("url");
 let querystring = require('querystring');
-var fs = require('fs');
+let fs = require('fs');
+
+let twitterApi = require('./twitter_test');
 
 var server = http.createServer(on_request);
 function on_request(req, res)
@@ -47,14 +49,14 @@ function on_connection (socket)
 {
     console.log('New client connected!');
 
+    socket.hashtags_str = "";
     socket.on("hashtags", on_hashtags);
     function on_hashtags(socket)
     {
 
     }
 
-    // TODO - Handle twitter there
-    socket.emit("new_tweet", "Name", "Content");
+    twitterApi.connectToTwitter(socket);
 }
 
 
