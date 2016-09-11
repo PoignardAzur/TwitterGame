@@ -1,3 +1,7 @@
+/*
+** Part of the code that handles using the twitter API, and transmitting its
+** data to the server-client sockets.
+*/
 
 let Twit = require('twit')
 
@@ -6,12 +10,7 @@ function connectToTwitter(socket)
 {
     socket.hashtags_str = '#KohLanta';
 
-    let twitSocket = new Twit({
-        consumer_key:         'REDACTED'
-        , consumer_secret:      'REDACTED'
-        , access_token:         'REDACTED'
-        , access_token_secret:  'REDACTED'
-    });
+    let twitSocket = new Twit(require("./twitter_keys").keys);
 
     twitSocket.get('search/tweets', { q: socket.hashtags_str }, get_callback);
     function get_callback(err, data, response)
@@ -48,6 +47,7 @@ function connectToTwitter(socket)
         socket.emit("error", "Failed to connect to twitter");
     }
 
+    // If the client is disconnect, the stream is no longer necessary
     socket.on("disconnect", function() {
         twitStream.stop();
     });

@@ -1,46 +1,15 @@
-let http = require('http');
-let url = require("url");
-let querystring = require('querystring');
-let fs = require('fs');
+/*
+** The main server file
+** The client needs to connect with their browser to a server running this
+** script to get the application
+*/
 
-let twitterApi = require('./twitter_test');
+let http = require("http");
+let twitterApi = require('./twitter_api');
 
-var server = http.createServer(on_request);
-function on_request(req, res)
-{
-    let parsed_url = url.parse(req.url);
-    let pathname = parsed_url.pathname;
-    var params = querystring.parse(parsed_url.query);
-
-    console.log(pathname);
-    console.log(params);
-
-    if (pathname == "/")
-        var file_sent = "./main.html";
-    else if (pathname == "/build.js")
-        var file_sent = "./build.js";
-    else
-    {
-        res.writeHead(404, {"Content-Type": "text/html"});
-        res.end("<h1>404: No such page</h1>");
-        return;
-    }
-
-    fs.readFile(file_sent, 'utf-8', function(error, content)
-    {
-        if (error)
-        {
-            res.writeHead(500, {"Content-Type": "text/html"});
-            res.end("<h1>500: Internal error</h1>" +
-            "<p>Cannot load page.</p>");
-        }
-        else if (file_sent == "./build.js")
-            res.writeHead(200, {"Content-Type": "application/javascript"});
-        else
-            res.writeHead(200, {"Content-Type": "text/html"});
-        res.end(content);
-    });
-};
+// This function is called for every new client that tries to load a page
+let on_request = require("./server_response").on_request;
+let server = http.createServer(on_request);
 
 var io = require('socket.io').listen(server);
 
@@ -53,11 +22,10 @@ function on_connection (socket)
     socket.on("hashtags", on_hashtags);
     function on_hashtags(socket)
     {
-
+        // TODO - Add hashtag handling
     }
 
     twitterApi.connectToTwitter(socket);
 }
-
 
 server.listen(8042);
