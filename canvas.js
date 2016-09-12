@@ -3,7 +3,7 @@
 ** Exports addTweet() and render()
 */
 
-let PIXI = require('./pixi.min');
+let PIXI = require('pixi.js');
 
 let renderer = PIXI.autoDetectRenderer(512, 512);
 let resources = PIXI.loader.resources;
