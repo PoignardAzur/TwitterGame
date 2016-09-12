@@ -13,7 +13,7 @@ The following steps are necessary to run this application:
     * twit: ~2.2.4
 * Install `browserify`
 * Edit the `hashtag_list.js` file and add/remove the hashtags of your choosing
-* Edit the `twitter_keys.js` file and add your own keys
+* Edit the `twitter_keys.js` file and add your own keys (see `Twitter keys` below)
     * NOTE: These keys should not be commited and pushed upstream; if you do commit this file, I recommend resetting your keys on your twitter account
 * Run browserify: `browserify main.js >build.js`
 * Start a server: `node server.js`
