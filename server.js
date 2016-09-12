@@ -25,7 +25,7 @@ function on_connection (socket)
                     // Should prevent code injections (?)
                     if (word.match(/^#\w+$/))
                     {
-                        socket.hashtags_str += word + " ";
+                        socket.hashtags_str += word + " OR ";
                     }
 
                 }

@@ -17,6 +17,7 @@ document.body.appendChild(renderer.view);
 let stage = new PIXI.Container();
 let tweetBoxArray = [];
 
+let score = 0;
 
 module.exports.addTweet = addTweet;
 
@@ -102,6 +103,8 @@ function removeBoxAtPos(x, y)
         {
             tweetBoxArray[i].box.destroy(true);
             tweetBoxArray.splice(i, 1);
+            score++;
+            document.getElementById('score').firstChild.nodeValue = score;
             return;
         }
     }
